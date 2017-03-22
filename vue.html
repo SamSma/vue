@@ -1,23 +1,90 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue - 留言板</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
 <body>
-    <div id="box">
-            {{ msg }}
+    <div id="box" class="container" style="padding-top: 20px;">
+        <form  class="form-horizontal">
+            <div class="form-group">
+                <label for="" class="col-md-3 text-right">用户名</label>
+                <div class="col-md-9">
+                    <input v-model="name" type="text" class="form-control" placeholder="请输入用户名">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="" class="col-md-3 text-right">年龄</label>
+                <div class="col-md-9">
+                    <input v-model="age" type="text" class="form-control" placeholder="请输入年龄">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="" class="col-md-3 text-right"></label>
+                <div class="col-md-9">
+                    <input @click="add()" type="button" class="btn btn-primary" value="确定"> <input type="reset" class="btn btn-default" value="重置">
+                </div>
+            </div>
+            <hr>
+            <table class="table table-bordered">
+                <caption class="h3 text-center text-info"> 用户信息表</caption>
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>名字</th>
+                    <th>年龄</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr v-if="users.length == 0">
+                        <th class="text-center text-muted" colspan="4"> 暂无数据... </th>
+                    </tr>
+                    <tr v-for="(i,v) in users">
+                        <th>{{ i+1 }}</th>
+                        <th>{{ v.name }}</th>
+                        <th>{{ v.age }}</th>
+                        <th><a href="javascript:;" class="btn btn-primary btn-sm">删除</a> </th>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+
+
+        </form>
+
+
     </div>
+
+
 
 <script src="js/vue.js"></script>
 <script>
+    new Vue({
+        el : '#box',
+        data : {
+            name : '',
+            age  : '' ,
+            users : []
+        } ,
+        methods :{
+            add:function () {
+               this.users.push({
+                   name : this.name ,
+                   age : this .age ,
+               });
+                this.name = '';
+                this.age = '';
+            }
+        }
+    })
 
-     new Vue({
-         el   : '#box',
-         data : {
-             msg :"嗨，vue!"
-         }
-     })
+
 
 
 </script>

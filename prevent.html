@@ -1,0 +1,86 @@
+<!doctype html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <title>Document</title>
+    <style>
+            #box{
+                width: 600px;
+                margin: 50px auto;
+                position: relative;
+            }
+            ul{
+                position: absolute;
+                top:30px;
+                left:0 ;
+                list-style: none;
+                padding-left: 0px;
+            }
+            .bg{
+                background: #ccc;
+            }
+
+
+    </style>
+</head>
+<body>
+
+<div id="box">
+    <input type="text" @keyup="show(ev)" @keydown.down="moveup()" @keydown.up.prevent="move()" placeholder="请输入...." v-model="val">
+    <br>
+    <ul  v-if="dataArr.length != 0" >
+        <li v-for="(i,v) in dataArr" :class="{ bg : i == curIndex} ">
+            {{ v }}
+        </li>
+    </ul>
+
+
+</div>
+<script src="js/vue.js"></script>
+<script src="js/vue-resource.js"></script>
+<script>
+new Vue({
+    el : '#box',
+    data : {
+        dataArr : [],
+        val : '',
+        curIndex : -1
+    },
+    methods :{
+        show : function (ev) {
+            var ev = window.event || ev ;
+
+            if(ev.keyCode == 38 || ev.keyCode == 40) return;
+            if(ev.keyCode == 13){
+                window.open('https://www.baidu.com/s?wd='+this.val);
+                this.val='';
+            }
+            this.$http.jsonp('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',{
+                wd : this.val
+            },{
+                jsonp : 'cb'
+            }).then(function(res){
+                this.dataArr = res.data.s;
+            })
+
+        },
+        moveup : function () {
+            this.curIndex++;
+            if(this.dataArr.length == this.curIndex) this.curIndex = -1;
+            this.val = this.dataArr[this.curIndex];
+        },
+        move : function () {
+            this.curIndex--;
+            if(this.curIndex==-2) this.curIndex = this.dataArr.length-1;
+            this.val = this.dataArr[this.curIndex];
+        }
+    }
+})
+
+</script>
+</body>
+</html>
